@@ -1,0 +1,16 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "What Makes a Song Feel Like a Hit?",
+    "section": "",
+    "text": "Introduction\nMusic streaming platforms give listeners access to an enormous range of songs, genres, and styles. Even when two songs are both popular, they may feel completely different in terms of mood, intensity, and movement. Because of that, it is useful to look beyond popularity alone and focus on the musical features that help shape how songs sound.\nThis project uses a Spotify tracks dataset from Kaggle to explore how songs differ across genres. Rather than trying to explain every feature in the dataset, this visualization focuses on a single relationship that is both easy to understand and useful to explore interactively.\n\n\nMotivating Question\nHow do energy and danceability vary across genres, and where do more popular songs tend to appear?\nThis question matters because songs are often described as either energetic, danceable, emotional, calm, or intense. By plotting these features against each other, we can begin to see whether certain genres cluster in similar regions and whether popular songs tend to share similar characteristics.\n\n\nAbout the Dataset\nThe dataset contains Spotify track-level information, including:\n\ntrack name\n\n\n\nartist name\n\n\n\ngenre\n\n\n\npopularity\n\n\n\ndanceability\n\n\n\nenergy\n\n\n\nother audio features such as tempo, valence, loudness, and speechiness\n\n\n\nData Preparation\nFirst, I removed rows with missing values in the variables used for the visualization.\nNext, I limited the display to the 10 genres with the most songs so the chart would remain readable and responsive.\nSummary\n\n\n# A tibble: 1 × 5\n  tracks genres avg_popularity avg_energy avg_danceability\n   &lt;int&gt;  &lt;int&gt;          &lt;dbl&gt;      &lt;dbl&gt;            &lt;dbl&gt;\n1   5000     10           34.1       0.61             0.52\n\n\n\n\nInteractive Visualization\nHover over points to see song details. Click legend items to filter genres.\n\n\n\n\n\n\n\n\nWhat This Shows\nSome genres cluster closely, meaning songs in those genres have similar characteristics. Other genres are more spread out, showing more variety. Popular songs appear in many different areas, which suggests there is no single formula for a hit.\n\n\nExplore\nTry interacting with the chart:\n\nHover over songs\nTurn genres on/off in the legend\nLook for clusters or patterns\n\n\n\nConclusion\nThis visualization shows that songs differ widely across genres, and popularity is not limited to one specific combination of energy and danceability. The interactive chart makes it easier to explore these patterns and compare songs directly."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  }
+]
