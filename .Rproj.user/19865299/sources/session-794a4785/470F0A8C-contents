@@ -1,0 +1,148 @@
+---
+title: "What Makes a Song Feel Like a Hit?"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    embed-resources: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+library(tidyverse)
+library(plotly)
+```
+
+# Introduction
+
+Music streaming platforms give listeners access to an enormous range of songs, genres, and styles. Even when two songs are both popular, they may feel completely different in terms of mood, intensity, and movement. Because of that, it is useful to look beyond popularity alone and focus on the musical features that help shape how songs sound.
+
+This project uses a Spotify tracks dataset from Kaggle to explore how songs differ across genres. Rather than trying to explain every feature in the dataset, this visualization focuses on a single relationship that is both easy to understand and useful to explore interactively.
+
+# Motivating Question
+
+**How do energy and danceability vary across genres, and where do more popular songs tend to appear?**
+
+This question matters because songs are often described as either energetic, danceable, emotional, calm, or intense. By plotting these features against each other, we can begin to see whether certain genres cluster in similar regions and whether popular songs tend to share similar characteristics.
+
+# About the Dataset
+
+The dataset contains Spotify track-level information, including:
+
+-   track name
+
+<!-- -->
+
+-    artist name
+
+<!-- -->
+
+-    genre
+
+<!-- -->
+
+-    popularity
+
+<!-- -->
+
+-    danceability
+
+<!-- -->
+
+-    energy
+
+<!-- -->
+
+-    other audio features such as tempo, valence, loudness, and speechiness
+
+```{r}
+spotify <- read_csv("data/dataset.csv", show_col_types = FALSE)
+```
+
+# Data Preparation
+
+First, I removed rows with missing values in the variables used for the visualization.
+
+```{r}
+spotify_clean <- spotify %>%
+  drop_na(danceability, energy, popularity, track_name, artists, track_genre)
+```
+
+Next, I limited the display to the 10 genres with the most songs so the chart would remain readable and responsive.
+
+```{r}
+top_genres <- spotify_clean %>%
+  count(track_genre, sort = TRUE) %>%
+  slice_head(n = 10) %>%
+  pull(track_genre)
+
+spotify_top <- spotify_clean %>%
+  filter(track_genre %in% top_genres) %>%
+  slice_sample(n = 5000)
+```
+
+Summary
+
+```{r}
+spotify_top %>%
+  summarize(
+    tracks = n(),
+    genres = n_distinct(track_genre),
+    avg_popularity = round(mean(popularity), 2),
+    avg_energy = round(mean(energy), 2),
+    avg_danceability = round(mean(danceability), 2)
+  )
+```
+
+# Interactive Visualization
+
+Hover over points to see song details. Click legend items to filter genres.
+
+```{r}
+fig <- plot_ly(
+  data = spotify_top,
+  x = ~energy,
+  y = ~danceability,
+  color = ~track_genre,
+  size = ~popularity,
+  sizes = c(8, 20),
+  type = "scatter",
+  mode = "markers",
+  text = ~paste(
+    "<b>Track:</b>", track_name,
+    "<br><b>Artist:</b>", artists,
+    "<br><b>Genre:</b>", track_genre,
+    "<br><b>Popularity:</b>", popularity
+  ),
+  hoverinfo = "text",
+  marker = list(opacity = 0.7)
+) %>%
+  layout(
+    title = "Energy vs Danceability by Genre",
+    xaxis = list(title = "Energy"),
+    yaxis = list(title = "Danceability")
+  )
+
+fig
+```
+
+# What This Shows
+
+Some genres cluster closely, meaning songs in those genres have similar characteristics. Other genres are more spread out, showing more variety. Popular songs appear in many different areas, which suggests there is no single formula for a hit.
+
+# Explore
+
+Try interacting with the chart:
+
+-    Hover over songs
+
+-    Turn genres on/off in the legend
+
+-    Look for clusters or patterns
+
+# Conclusion
+
+This visualization shows that songs differ widely across genres, and popularity is not limited to one specific combination of energy and danceability. The interactive chart makes it easier to explore these patterns and compare songs directly.
